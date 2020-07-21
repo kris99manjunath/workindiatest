@@ -1,4 +1,6 @@
-const { create,login,update,remove } = require('./user_service');
+const { create,login } = require('./user_service');
+const { createToken } = require('../helperfns/toke_manage');
+const { verifyPassword,encryptPassword } = require('../helperfns/encrypt_password');
 
 module.exports = {
     create : (req,res)=>{
@@ -19,12 +21,13 @@ module.exports = {
         });
     },
     
-    login: (req,res)=>{
-        
+    login:(req,res)=>{
+        console.log("in controller")
         const id = req.body.agent_id;
         const password = req.body.password;
 
-        login(id,(err,result)=>{
+        login(req.body,async(err,result)=>{
+            console.log("login call back")
             if(err)
             {
                 console.log(err)
@@ -33,15 +36,22 @@ module.exports = {
                 });
             }
             console.log(result);
-            if(!result.length || result[0].password !== password)
+            const tmp = await encryptPassword(password);
+            console.log(tmp)
+            const flag = await verifyPassword({hash:result,password:password})
+            console.log(flag)
+
+            if(!result.length && flag===false)
             {
                 return res.status(401).json({
                     "status" : "failed",
                 })    
             }
+            const token = createToken(id);
             return res.json({
                 "status" : "success",
-                "agent_id":result[0].agent_id
+                "agent_id":id,
+                "auth_token": token
             }) 
         })
     },
