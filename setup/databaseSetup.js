@@ -38,7 +38,7 @@ dbSetup = () => {
         });
 
         // create tables
-        await con.query(`CREATE TABLE User(agent_id VARCHAR(30) PRIMARY KEY, password VARCHAR(100))`, (err, result) => {
+        await con.query(`CREATE TABLE User(agent_id VARCHAR(30) PRIMARY KEY NOT NULL, password VARCHAR(100))`, (err, result) => {
             if (err) {
                 console.log(err.sqlMessage);
                 process.exit();
@@ -47,7 +47,7 @@ dbSetup = () => {
                 console.log("User Table created");
         });
 
-        await con.query(`CREATE TABLE Todo(todo_id INT PRIMARY KEY AUTO_INCREMENT,agent_id VARCHAR(30) ,title VARCHAR(30), description VARCHAR(100),category VARCHAR(30),due_date DATE,FOREIGN KEY (agent_id) REFERENCES User(agent_id))`, (err, result) => {
+        await con.query(`CREATE TABLE Todo(todo_id INT PRIMARY KEY AUTO_INCREMENT ,agent_id VARCHAR(30) NOT NULL,title VARCHAR(30), description VARCHAR(100),category VARCHAR(30),due_date DATE,FOREIGN KEY (agent_id) REFERENCES User(agent_id))`, (err, result) => {
             if (err) {
                 console.log(err.sqlMessage);
                 process.exit();
