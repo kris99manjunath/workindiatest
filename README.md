@@ -9,3 +9,5 @@ Then run the SetUP using "npm test"( or nodemon) (sample env is uploaded)<br>
 Once it runs without any erors, you can run index.js<br>
 
 (NOTE: IT is not advised to upload .env i just uploaded for the template)
+
+Login token must be sent throgh auth-token in headers. if token fails you cant access other todo functionalities.
